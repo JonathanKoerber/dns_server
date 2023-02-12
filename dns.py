@@ -40,7 +40,7 @@ def getflags(flags):
     ).to_bytes(1, byteorder="big")
 
 def get_query(data):
-        
+    
     state = 0
     exp_len = 0
     domain = ''
@@ -56,21 +56,19 @@ def get_query(data):
                 domain = ''
                 state = 0
                 x = 0
-                if byte == 0:
-                    domianparts.append(domain)
-                    break
+            if byte == 0:
+                domainparts.append(domain)
+                break
         else:
             state = 1
             exp_len = byte
         y += 1
-    print(x, y, data, len(data))
     question_type = data[y: y+2]
-    print('get query question_type', question_type)
     return(domainparts, question_type)   
 
 def getzone(domain):
     global zonedata
-    zone_name = '.'.join(domain)+'.'
+    zone_name = '.'.join(domain)
     return zonedata[zone_name]
 
 def get_rec(data):
@@ -98,7 +96,7 @@ def build_question(domain, rectype):
     qbytes += (1).to_bytes(2, byteorder='big')
     return qbytes
 
-def rectobytes(domain, revtype, recttl, recval):
+def rectobytes(domain, rectype, recttl, recval):
     
     rbytes = b'\xc0\xc0'
     
@@ -124,18 +122,15 @@ def buildresponse(data):
     nscount = (0).to_bytes(2, byteorder='big')
     arcount = (0).to_bytes(2, byteorder='big')
 
-    dns_header = transactionID+flags+ancount+nscount+arcount
-    print(dns_header)
+    dns_header = transactionID+flags+qd_count+ancount+nscount+arcount
     #create dns body
     dnsbody = b''
     records, rectype, domain = get_rec(data[12:])
-    print(records, rectype, domain)
-    dnsquestion = buildquestion(domain, rectype)
-    print(dnsquestion)
+    dnsquestion = build_question(domain, rectype)
     for record in records:
-        dnsbody += rectobytes(domainname, rectype, record['ttl'], redord['value'])
-
-    return dnsheader + dnsquestion + dnsbody
+        dnsbody += rectobytes(domain, rectype, record['ttl'], record['value'])
+    print(dns_header + dnsquestion + dnsbody)
+    return dns_header + dnsquestion + dnsbody
 
 
 
@@ -143,5 +138,5 @@ def buildresponse(data):
 while True:
     data, addr = sock.recvfrom(512)
     r = buildresponse(data)
-    r = b'hello world'
+    
     sock.sendto(r, addr)
