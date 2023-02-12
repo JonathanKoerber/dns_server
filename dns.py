@@ -3,9 +3,11 @@ import socket, glob, json
 port = 53
 ip = "127.0.0.1"
 
-
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-sock.bind((ip, port))
+def bind_socket():
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    sock.bind((ip, port))
+    return sock
+sock = bind_socket()
 
 #add data structures for testing.
 def load_zones():
@@ -20,7 +22,7 @@ def load_zones():
             j_zone[zonename] = data
     return j_zone
 zonedata = load_zones()
-print('zone loaded')
+
 
 def getflags(flags):
     b1, b2 = bytes(flags[:1]), bytes(flags[1:2])
@@ -74,12 +76,9 @@ def getzone(domain):
 def get_rec(data):
     domain, questiontype = get_query(data)
     qt = ''
-    print(domain, questiontype, )
-
     if questiontype == b'\x00\x01':
         qt = 'a'
     zone = getzone(domain)
-    print(zone)
     return (zone[qt], qt, domain)
 
 def build_question(domain, rectype):
@@ -129,11 +128,7 @@ def buildresponse(data):
     dnsquestion = build_question(domain, rectype)
     for record in records:
         dnsbody += rectobytes(domain, rectype, record['ttl'], record['value'])
-    print(dns_header + dnsquestion + dnsbody)
     return dns_header + dnsquestion + dnsbody
-
-
-
 
 while True:
     data, addr = sock.recvfrom(512)
