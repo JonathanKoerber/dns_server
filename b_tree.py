@@ -4,6 +4,9 @@ class BTreeNode:
         self.keys = []
         self.child = []
 
+    def __repr__(self) -> str:
+        tup = self.keys[0]
+        return tup[1]
 
 # Tree
 class BTree:
@@ -88,14 +91,16 @@ class BTree:
 
 def main():
     B = BTree(3)
-
-    for i in range(10):
-        B.insert((i, 2 * i))
+    l = [('key', 'value'), ('banana', 'pop corn'), ('cand', 'comdoms'), 
+         ('some', 'somthing'), ('beta', 'gama'), ('More', 'values'), ('and', 'the'),
+         ('a', '5'), ('the', 'and'), ('to', 'it'), ('be', 'a')]
+    for i in l:
+        B.insert(i)
 
     B.print_tree(B.root)
 
-    if B.search_key(8) is not None:
-        print("\nFound")
+    if B.search_key('banana') is not None:
+        print("\nFound", B.search_key('and'))
     else:
         print("\nNot Found")
 

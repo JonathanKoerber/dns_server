@@ -4,7 +4,7 @@ from dns import buildresponse, load_zones, bind_socket
 
 
 @pytest.mark.parametrize(
-    "search_size", [10, 100, 200, 300, 400, 500, 6001000, 10000, 10000]
+    "search_size", [10, 100, 200, 300, 400, 500, 600,1000, 10000, 10000]
 )
 def test_search(search_size, search_target, dig_request):
     """not sure how to get the server running. needs root privalage to bind socket to port.
