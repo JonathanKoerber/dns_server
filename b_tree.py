@@ -41,6 +41,7 @@ class BTree:
             while i >= 0 and k[0] < x.keys[i][0]:
                 i -= 1
             i += 1
+            print( i, self.t)
             if len(x.child[i].keys) == (2 * self.t) - 1:
                 self.split_child(x, i)
                 if k[0] > x.keys[i][0]:
@@ -89,21 +90,21 @@ class BTree:
             return self.search_key(k, self.root)
 
 
-def main():
-    B = BTree(3)
-    l = [('key', 'value'), ('banana', 'pop corn'), ('cand', 'comdoms'), 
-         ('some', 'somthing'), ('beta', 'gama'), ('More', 'values'), ('and', 'the'),
-         ('a', '5'), ('the', 'and'), ('to', 'it'), ('be', 'a')]
-    for i in l:
-        B.insert(i)
+# def main():
+#     B = BTree(20)
+#     l = [('key', 'value'), ('banana', 'pop corn'), ('cand', 'comdoms'), 
+#          ('some', 'somthing'), ('beta', 'gama'), ('More', 'values'), ('and', 'the'),
+#          ('a', '5'), ('the', 'and'), ('to', 'it'), ('be', 'a')]
+#     for i in l:
+#         B.insert(i)
 
-    B.print_tree(B.root)
+#     B.print_tree(B.root)
 
-    if B.search_key('banana') is not None:
-        print("\nFound", B.search_key('and'))
-    else:
-        print("\nNot Found")
+#     if B.search_key('banana') is not None:
+#         print("\nFound", B.search_key('and'))
+#     else:
+#         print("\nNot Found")
 
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
