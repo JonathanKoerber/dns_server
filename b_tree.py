@@ -41,7 +41,6 @@ class BTree:
             while i >= 0 and k[0] < x.keys[i][0]:
                 i -= 1
             i += 1
-            print( i, self.t)
             if len(x.child[i].keys) == (2 * self.t) - 1:
                 self.split_child(x, i)
                 if k[0] > x.keys[i][0]:
